@@ -2,152 +2,88 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 <title>Status</title>
 
 <style>
 *{box-sizing:border-box;user-select:none;-webkit-user-select:none}
-html,body{
-  margin:0;padding:0;width:100%;height:100%;
-  font-family:Segoe UI,Tahoma,Arial,sans-serif;
-  background:#000;color:#fff;overflow:hidden;
-  touch-action:none;
-}
+html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;overflow:hidden;touch-action:none;font-family:Segoe UI,Arial}
 
-/* ЧЁРНЫЙ ЭКРАН ДО ТАПА */
 #gate{position:fixed;inset:0;background:#000;z-index:99999}
 
-/* ФОН */
 #bg{
   position:fixed;inset:0;
   background:
     radial-gradient(circle at center, rgba(140,0,0,.4) 0%, rgba(0,0,0,.95) 65%),
     repeating-linear-gradient(90deg,
-      rgba(255,0,0,.06) 0px, rgba(255,0,0,.06) 1px,
+      rgba(255,0,0,.06) 0, rgba(255,0,0,.06) 1px,
       rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px);
   animation:blink 2s infinite;
 }
-@keyframes blink{
-  0%{filter:brightness(1)}
-  50%{filter:brightness(1.35)}
-  100%{filter:brightness(1)}
-}
+@keyframes blink{0%{filter:brightness(1)}50%{filter:brightness(1.35)}100%{filter:brightness(1)}}
 
-/* ЯЗЫКИ */
-#langbar{
-  position:fixed;top:10px;right:10px;z-index:10;
-}
-#langbar button{
-  margin-left:6px;padding:6px 10px;
-  background:#111;color:#fff;border:1px solid #ff2d2d;
-  border-radius:6px;cursor:pointer;
-}
-#langbar button.active{background:#ff2d2d;color:#000}
+#lang{position:fixed;top:10px;right:10px;z-index:5}
+#lang button{margin-left:6px;padding:6px 10px;background:#111;color:#fff;border:1px solid #ff2d2d;border-radius:6px}
+#lang .on{background:#ff2d2d;color:#000}
 
-/* ОСНОВА */
-#app{
-  position:relative;z-index:2;
-  width:100%;height:100%;
-  padding:16px;
-  display:flex;flex-direction:column;
-  justify-content:space-between;align-items:center;
-}
+#app{position:relative;z-index:2;height:100%;padding:16px;display:flex;flex-direction:column;justify-content:space-between;align-items:center}
 
-#logo{font-size:82px;color:#ff2d2d;text-shadow:0 0 20px red}
-#title{
-  font-size:clamp(22px,4vw,46px);
-  text-align:center;color:#ff1f1f;
-  text-shadow:0 0 14px red;
-}
-#subtitle{font-size:14px;text-align:center;color:#ccc}
+#logo{font-size:80px;color:#ff2d2d;text-shadow:0 0 20px red}
+#title{font-size:clamp(22px,4vw,44px);text-align:center;color:#ff1f1f;text-shadow:0 0 14px red}
+#sub{font-size:14px;color:#ccc;text-align:center}
 
 #panel{
   width:100%;max-width:1000px;
   background:rgba(0,0,0,.75);
   border:2px solid #8b0000;border-radius:12px;
-  padding:16px;box-shadow:0 0 30px rgba(255,0,0,.5);
+  padding:16px;box-shadow:0 0 30px rgba(255,0,0,.5)
 }
-
-h3{margin:6px 0;color:#ff4d4d}
-p,li{font-size:14px;line-height:1.5}
+h3{color:#ff4d4d;margin:6px 0}
+li,p{font-size:14px;line-height:1.5}
 ul{margin-left:18px}
 
-/* РАЗБЛОК */
-#unlock{
-  margin-top:10px;padding:10px;
-  border:1px dashed #ff2d2d;background:rgba(120,0,0,.15);
-  animation:pulse 1.2s infinite;
-}
+#unlock{margin-top:10px;padding:10px;border:1px dashed #ff2d2d;background:rgba(120,0,0,.15);animation:pulse 1.2s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:.6}100%{opacity:1}}
 
-/* ТАЙМЕР */
-#timer{
-  margin-top:12px;font-size:42px;color:#ff0000;text-align:center;
-}
+#timer{margin-top:12px;font-size:40px;color:#ff0000;text-align:center}
+#barWrap{margin-top:10px;height:18px;background:#111;border:1px solid #900;border-radius:6px;overflow:hidden}
+#bar{height:100%;width:0%;background:linear-gradient(90deg,#ff0000,#a80000)}
 
-/* ПРОГРЕСС */
-#barWrap{
-  margin-top:10px;height:18px;
-  background:#111;border:1px solid #900;border-radius:6px;overflow:hidden;
-}
-#bar{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,#ff0000,#a80000);
-}
+.err{position:fixed;min-width:220px;background:#0e0e0e;border:2px solid #ff2d2d;box-shadow:0 0 20px rgba(255,0,0,.9);z-index:9998;animation:shake .35s}
+.err h4{margin:0;background:#8b0000;padding:6px;font-size:13px}
+.err div{padding:8px;font-size:13px}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-3px)}100%{transform:translateX(0)}}
 
-/* ОКНА ОШИБОК */
-.error{
-  position:fixed;min-width:240px;
-  background:#0e0e0e;border:2px solid #ff2d2d;
-  box-shadow:0 0 20px rgba(255,0,0,.9);
-  z-index:9998;animation:shake .35s;
-}
-.error h4{margin:0;background:#8b0000;padding:6px;font-size:13px}
-.error div{padding:8px;font-size:13px}
-@keyframes shake{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-4px)}
-  50%{transform:translateX(4px)}
-  75%{transform:translateX(-3px)}
-  100%{transform:translateX(0)}
-}
-
-/* BSOD */
-#bsod{
-  display:none;position:fixed;inset:0;z-index:100000;
-  background:#0b3ea8;color:#fff;font-family:Consolas,monospace;
-  padding:30px;
-}
+#bsod{display:none;position:fixed;inset:0;z-index:100000;background:#0b3ea8;color:#fff;font-family:Consolas,monospace;padding:30px}
 #bsod h1{font-size:60px;margin:0}
 #bsod p{font-size:18px}
 </style>
 </head>
 
 <body>
-
 <div id="gate"></div>
 <div id="bg"></div>
 
-<div id="langbar">
-  <button data-lang="ru" class="active">RU</button>
-  <button data-lang="en">EN</button>
-  <button data-lang="ua">UA</button>
+<div id="lang">
+  <button data-l="ru" class="on">RU</button>
+  <button data-l="en">EN</button>
+  <button data-l="ua">UA</button>
 </div>
 
 <div id="app">
   <div>
     <div id="logo">☠️</div>
     <div id="title"></div>
-    <div id="subtitle"></div>
+    <div id="sub"></div>
   </div>
 
   <div id="panel">
-    <h3 id="vTitle"></h3>
-    <ul id="vList"></ul>
+    <h3 id="vh"></h3>
+    <ul id="vl"></ul>
 
     <div id="unlock">
-      <h3 id="unlockTitle"></h3>
-      <p id="unlockText"></p>
+      <h3 id="uh"></h3>
+      <p id="ut"></p>
     </div>
 
     <div id="timer">50:00</div>
@@ -157,123 +93,70 @@ ul{margin-left:18px}
 
 <div id="bsod">
   <h1>:(</h1>
-  <p>Произошёл критический сбой системы.</p>
+  <p>Critical system failure.</p>
   <p>STOP CODE: TROJAN_WIN32_EBLAN</p>
 </div>
 
-<audio id="music" loop>
+<audio id="music" loop preload="auto">
   <source src="audio.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-/* ЯЗЫКИ */
 const TEXT={
-  ru:{
-    title:"УСТРОЙСТВО ИЗОЛИРОВАНО",
-    subtitle:"ФСБ — контроль безопасности активирован",
-    vTitle:"Обнаружены нарушения:",
-    vList:[
-      "Посещение порнографических сайтов",
-      "Попытки обхода ограничений",
-      "Несанкционированное ПО",
-      "Trojan.Win32.Eblan"
-    ],
-    unlockTitle:"РАЗБЛОКИРОВКА",
-    unlockText:"Для снятия блокировки напишите в Telegram: <b>@Dexter1940</b>"
-  },
-  en:{
-    title:"DEVICE ISOLATED",
-    subtitle:"FBI — security monitoring enabled",
-    vTitle:"Detected violations:",
-    vList:[
-      "Pornographic websites",
-      "Bypassing system restrictions",
-      "Unauthorized software",
-      "Trojan.Win32.Eblan"
-    ],
-    unlockTitle:"UNLOCK",
-    unlockText:"To remove the lock, contact Telegram: <b>@Dexter1940</b>"
-  },
-  ua:{
-    title:"ПРИСТРІЙ ІЗОЛЬОВАНО",
-    subtitle:"СБУ — контроль безпеки активовано",
-    vTitle:"Виявлено порушення:",
-    vList:[
-      "Відвідування порносайтів",
-      "Спроби обходу обмежень",
-      "Несанкціоноване ПЗ",
-      "Trojan.Win32.Eblan"
-    ],
-    unlockTitle:"РОЗБЛОКУВАННЯ",
-    unlockText:"Для зняття блокування напишіть у Telegram: <b>@Dexter1940</b>"
-  }
+  ru:{t:"УСТРОЙСТВО ИЗОЛИРОВАНО",s:"ФСБ — контроль безопасности активирован",
+      vh:"Обнаружены нарушения:",vl:["Порнографические сайты","Обход ограничений","Несанкционированное ПО","Trojan.Win32.Eblan"],
+      uh:"РАЗБЛОКИРОВКА",ut:"Напишите в Telegram: <b>@Dexter1940</b>"},
+  en:{t:"DEVICE ISOLATED",s:"FBI — security monitoring enabled",
+      vh:"Detected violations:",vl:["Pornographic websites","Bypassing restrictions","Unauthorized software","Trojan.Win32.Eblan"],
+      uh:"UNLOCK",ut:"Contact Telegram: <b>@Dexter1940</b>"},
+  ua:{t:"ПРИСТРІЙ ІЗОЛЬОВАНО",s:"СБУ — контроль безпеки активовано",
+      vh:"Виявлено порушення:",vl:["Порносайти","Обхід обмежень","Несанкціоноване ПЗ","Trojan.Win32.Eblan"],
+      uh:"РОЗБЛОКУВАННЯ",ut:"Напишіть у Telegram: <b>@Dexter1940</b>"}
 };
 
-function applyLang(l){
-  document.querySelectorAll('#langbar button')
-    .forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
-  const t=TEXT[l];
-  title.textContent=t.title;
-  subtitle.textContent=t.subtitle;
-  vTitle.textContent=t.vTitle;
-  unlockTitle.textContent=t.unlockTitle;
-  unlockText.innerHTML=t.unlockText;
-  vList.innerHTML="";
-  t.vList.forEach(x=>{
-    const li=document.createElement("li");li.textContent=x;vList.appendChild(li);
-  });
-}
-applyLang("ru");
-document.querySelectorAll('#langbar button').forEach(b=>b.onclick=()=>applyLang(b.dataset.lang));
+const title=document.getElementById("title"), sub=document.getElementById("sub"),
+      vh=document.getElementById("vh"), vl=document.getElementById("vl"),
+      uh=document.getElementById("uh"), ut=document.getElementById("ut");
 
-/* СТАРТ: ЛЮБОЙ ТАП */
+function lang(l){
+  document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));
+  const x=TEXT[l]; title.textContent=x.t; sub.textContent=x.s; vh.textContent=x.vh;
+  uh.textContent=x.uh; ut.innerHTML=x.ut; vl.innerHTML="";
+  x.vl.forEach(i=>{const li=document.createElement("li");li.textContent=i;vl.appendChild(li);});
+}
+lang("ru");
+document.querySelectorAll('#lang button').forEach(b=>b.onclick=()=>lang(b.dataset.l));
+
 const gate=document.getElementById("gate");
 const music=document.getElementById("music");
+
 function startAll(e){
   e.preventDefault();
   const el=document.documentElement;
   if(el.requestFullscreen) el.requestFullscreen();
   else if(document.body.requestFullscreen) document.body.requestFullscreen();
-  music.muted=false; music.volume=1; music.play().catch(()=>{});
+  music.muted=false; music.volume=1;
+  const play=()=>music.play().catch(()=>{});
+  play(); setTimeout(play,200); setTimeout(play,600);
   gate.remove();
 }
 gate.addEventListener("pointerdown", startAll, {passive:false});
+setInterval(()=>{music.muted=false; music.volume=1;},300);
 
-/* ТАЙМЕР */
 let sec=50*60;
-setInterval(()=>{
-  if(sec<=0)return;
-  sec--;
-  timer.textContent=
-    String(Math.floor(sec/60)).padStart(2,"0")+":"+
-    String(sec%60).padStart(2,"0");
-},1000);
+setInterval(()=>{ if(sec>0){sec--; timer.textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");}},1000);
 
-/* ПРОГРЕСС */
-let p=0;
-setInterval(()=>{
-  p=Math.min(100,p+Math.random()*1.2);
-  bar.style.width=p+"%";
-},800);
+let p=0; setInterval(()=>{p=Math.min(100,p+Math.random()*1.2); bar.style.width=p+"%";},800);
 
-/* ОШИБКИ */
 const ERR=["ACCESS DENIED","SYSTEM LOCKED","ERROR 0x1337","SECURITY VIOLATION"];
 setInterval(()=>{
-  const e=document.createElement("div");
-  e.className="error";
-  e.style.top=Math.random()*60+10+"%";
-  e.style.left=Math.random()*60+10+"%";
-  e.innerHTML="<h4>SYSTEM</h4><div>"+ERR[Math.floor(Math.random()*ERR.length)]+"</div>";
-  document.body.appendChild(e);
-  setTimeout(()=>e.remove(),2500);
-},1700);
+  const d=document.createElement("div");
+  d.className="err"; d.style.top=Math.random()*60+10+"%"; d.style.left=Math.random()*60+10+"%";
+  d.innerHTML="<h4>SYSTEM</h4><div>"+ERR[Math.floor(Math.random()*ERR.length)]+"</div>";
+  document.body.appendChild(d); setTimeout(()=>d.remove(),2200);
+},1600);
 
-/* BSOD */
-setInterval(()=>{
-  bsod.style.display="block";
-  setTimeout(()=>bsod.style.display="none",3500);
-},25000);
+setInterval(()=>{bsod.style.display="block"; setTimeout(()=>bsod.style.display="none",3000);},25000);
 </script>
-
 </body>
 </html>
